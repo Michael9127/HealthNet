@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load utils_extras %}
+
+{% block title %}Admit {{ patient }}{% endblock %}
+{% block content %}
+
+
+<form action="{% url 'admit_patient' patient.pk %}" method="POST">
+{% csrf_token %}
+
+<div class="container">
+    <div class="row">
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">{{patient}} Currently Admitted To:</div>
+            <div class="panel-body">
+                {% if patient.admitted_to %}
+                    {{patient.admitted_to}}
+                {% else %}
+                    (Not currently admitted to a hospital)
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            {% if user.is_superuser %}
+                <div class="panel-heading">Modify {{patient}}'s Current Hospital:</div>
+            {% else %}
+                <div class="panel-heading">Actions:</div>
+            {% endif %}
+            <div class="panel-body">
+                {% if user.is_superuser %}
+                    <select type="submit" id="patient.admitted_to" name="{{ patient.pk }}" class="form-control">
+                        <option value={{ None }}>{{ None }}</option>
+                        {% for hsptl in hospitals %}
+                            {% ifequal hsptl patient.admitted_to %}
+                                <option selected="selected" value="{{ hsptl }}">{{ hsptl }}</option>
+                            {% else %}
+                                <option value="{{ hsptl }}">{{ hsptl }}</option>
+                            {% endifequal %}
+                        {% endfor %}
+                    </select>
+                    <p></p>
+                    <p align="center">
+                        <input type="submit" class="btn btn-primary" name="admin-submit" value="Update Hospital">
+                    </p>
+                {% else %}
+                    {% if not patient.admitted_to %}
+                        <input type="submit" class="btn btn-default" name="{{ patient.pk }}" value="Admit to {{ medical_prof.hospital }}">
+                        <a href="{% url 'updatepatientmedicalinformation' patient.pk %}" class="btn btn-default">Back to Patient</a><br><br>
+                        <p>Reason for admission:</p>
+                        <input type="radio" name="reason" value="emergency surgery"> Emergency Surgery<br>
+                        <input type="radio" name="reason" value="scheduled surgery"> Scheduled Surgery<br>
+                        <input type="radio" name="reason" value="scheduled checkup"> Scheduled Checkup<br>
+                        <input type="radio" name="reason" value="other emergency"> Other Emergency<br>
+                        <input type="radio" name="reason" value="other scheduled appointment"> Other Scheduled Appointment<br>
+                    {% elif user|has_group:"Doctors" %}
+                        {% ifequal patient.admitted_to medical_prof.hospital %}
+                            <input type="submit" class="btn btn-default" name="{{ patient.pk }}" value="Discharge">
+                            <a href="{% url 'updatepatientmedicalinformation' patient.pk %}" class="btn btn-default">Back to Patient</a>
+                        {% else %}
+                            <input type="submit" class="btn btn-default" name="{{ patient.pk }}" value="Transfer">
+                            <a href="{% url 'updatepatientmedicalinformation' patient.pk %}" class="btn btn-default">Back to Patient</a>
+                        {% endifequal %}
+                    {% elif user|has_group:"Nurses" and not user.is_superuser %}
+                        Only Doctors and Administrators can transfer patients to a new hospital.
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+</form>
+{% endblock %}

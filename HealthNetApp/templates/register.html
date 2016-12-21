@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %} Patient Registration {% endblock %}
+{% block content %}
+    {% block above_form %}{% endblock %}
+    <div class="container center-block" style="width:800px">
+        <div class="row ">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Registration</div>
+                    <div class="panel-body">
+                        <form class="navbar-form" action="" method="post">
+                            {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="control-group error">
+                                {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                            {% if username_taken %}
+                                <div class="alert alert-danger">
+                                    Sorry, that username is already taken.
+                                </div>
+                            {% endif %}
+                            {% if password_mismatch %}
+                                <div class="alert alert-danger">
+                                    Passwords didn't match.
+                                </div>
+                            {% endif %}
+                            {% if invalid_email %}
+                                <div class="alert alert-danger">
+                                    Invalid Email address.
+                                </div>
+                            {% endif %}
+                            {% if invalid_bday %}
+                                <div class="alert alert-danger">
+                                    Invalid Date of Birth.
+                                </div>
+                            {% endif %}
+
+                            <ul class="list-group">
+                                {% include 'form_fields_loop.html' %}
+                            </ul>
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+        </div>
+        <div class="row ">
+
+            {% block extrapanel %}{% endblock %}
+        </div>
+
+    </div>
+    <script>
+        $(function() {
+            $('#id_emergency_contact').before("<p>Enter another's username to link them as your emergency contact. Their contact information will be visible by doctors as your emergency contact information.</p>"+
+                                              "<p>If your emergency contact is not in the system, enter their information here as completely as possible.</p>");
+            $("#{{form.date_of_birth.id_for_label}}").datepicker();
+        });
+    </script>
+
+{% endblock %}

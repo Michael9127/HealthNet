@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}View Log Entry {{entry.pk}}{% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Log Entry {{entry.pk}} </b></div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>User Performing Action:</b> {{entry.user.username}}</li>
+                        <li class="list-group-item"><b>Action Type:</b> {{entry.get_action_type_display}}</li>
+                        <li class="list-group-item"><b>Type of Object Affected:</b> {{entry.get_thing_type_display}}</li>
+                        <li class="list-group-item"><b>PKID of Object Affected:</b> {{entry.thing_instance}}</li>
+                        <li class="list-group-item"><b>Field of Object Affected:</b> {{entry.thing_field}}</li>
+                        <li class="list-group-item"><b>Description of Event:</b> {{entry.eventDescription}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

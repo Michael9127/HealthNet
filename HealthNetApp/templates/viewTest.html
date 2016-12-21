@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% load utils_extras %} {% block title %} View Medical Test Results {% endblock %} {% block content %} {% block above_form %}{% endblock %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Viewing Test Results for {{ test.patient.name }}</div>
+                <div class="panel-body">
+                    <form class="navbar-form" action="{% url 'viewTestForm' test.pk 0%}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %} {{ form.errors }} {{ form.non_field_errors }}
+
+                            {% if pend %}
+                            <div style="text-align:center"><font size="5"><b>Test Status: Pending</b></font></div> {% else %}
+                            <div style="text-align:center"><font size="5"><b>Test Status: Confirmed</b></font></div> {% endif %}
+
+                            {% if not user|has_group:"Patients" %}
+                                <div style="text-align:left">
+                                    <a href="{% url 'viewTestForm' test.pk 2%}" class="btn btn-default btn-sm">Edit</a>
+                                    <a href="{% url 'removeTest' patient_pk test.pk %}" class="btn btn-primary btn-sm">Remove</a>
+                                    {% if not test.pending %}{% if user|has_group:"Doctors" %}
+                                        <a href="{% url 'confirmTest' test.pk patient_pk%}" class="btn btn-primary btn-sm">Confirm Test</a>
+                                    {% endif %} {% endif %}
+                                </div>
+                        {% endif %}
+                        <br>
+                        <ul class="list-unstyled">
+                            <li><pre>Title: {{test.title}}</pre></li>
+                            <li><pre>Patient: {{test.patient.name}}</pre></li>
+                            <li><pre>Test Date: {{test.testDate}}</pre></li>
+                            <li><pre>Doctor: {{test.doctor}}</pre></li>
+                            <li><pre>Hospital: {{test.hospital}}</pre></li>
+                            {% if user|has_group:"Doctors" or user.is_superuser or user|has_group:"Nurses"%}
+                            <li><pre>Results: {{test.results}}</pre></li>
+                            {% endif %} {% if user|has_group:"Patients" and not pend %}
+                            <li><pre>Results: {{test.results}}</pre></li>
+                            {% endif %}
+                        </ul>
+                        {% if user|has_group:"Patients" and pend %}
+                        <p align="center"><font size="3">Results will become available once the test is confirmed by your doctor.</font></p>
+                        {% endif %}
+                        <div style="text-align:center">
+                            {% if not user|has_group:"Patients" %}
+
+                                <a href="{% url 'listTests' patient_pk%}" class="btn btn-default">List Tests</a>
+
+                            {% else %}
+                                <a href="{% url 'updatepatient' %}" class="btn btn-default">Back to Profile</a>
+                            {% endif %}
+                        </div>
+                        <br> Pictures:
+                        <br> {% if not test.pictures and not test.pictures1 and not test.pictures2 and not test.pictures3 and not test.pictures4 and not test.pictures5 %}
+                        <p>No pictures were uploaded for this test.</p>
+                        {% endif %} {% if test %} {% if test.pictures %}
+                        <figure>
+                            <img src="{{ test.pictures.url }}" alt="MedicalPicture" height="400" width="400">
+                            <figcaption><a href="{{ test.pictures.url }}">View File 1</a></figcaption>
+                        </figure>
+                        <br> {% endif %} {% if test.pictures1 %}
+                        <figure>
+                            <img src="{{ test.pictures1.url }}" alt="MedicalPicture1" height="400" width="400">
+                            <figcaption><a href="{{ test.pictures1.url }}">View File 2</a></figcaption>
+                        </figure>
+                        <br> {% endif %} {% if test.pictures2 %}
+                        <figure>
+                            <img src="{{ test.pictures2.url }}" alt="MedicalPicture2" height="400" width="400">
+                            <figcaption><a href="{{ test.pictures2.url }}">View File 3</a></figcaption>
+                        </figure>
+                        <br> {% endif %}
+                        <br> {% if test.pictures3 %}
+                        <figure>
+                            <img src="{{ test.pictures3.url }}" alt="MedicalPicture3" height="400" width="400">
+                            <figcaption><a href="{{ test.pictures3.url }}">View File 4</a></figcaption>
+                        </figure>
+                        <br> {% endif %} {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">{% block extrapanel %}{% endblock %}</div>
+    </div>
+</div>
+{% endblock %}

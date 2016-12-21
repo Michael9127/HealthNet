@@ -1,0 +1,53 @@
+<div class="row">
+        <div class="text-center">
+            <b>
+            | Date Ranges: |
+            <a href="{% url 'viewstatistics' %}?metric={{request.GET.metric}}&days=30">30</a> |
+            <a href="{% url 'viewstatistics' %}?metric={{request.GET.metric}}&days=60">60</a> |
+            <a href="{% url 'viewstatistics' %}?metric={{request.GET.metric}}&days=120">120</a> |
+            <a href="{% url 'viewstatistics' %}?metric={{request.GET.metric}}&days=365">365</a> |
+            </b>
+
+            <form class="navbar-form" method="get">
+                {% csrf_token %}
+                <input type="hidden" name="metric" value="{{ request.GET.metric }}">
+                |
+                <b>
+                    {% if form.start.errors %}
+                        <span class="text-danger">
+                            Enter a valid Start Date:
+                        </span>
+                    {% else %}
+                        Start:
+                    {% endif %}
+                </b>
+                {{form.start}}
+                <b>
+                    {% if form.end.errors %}
+                        <span class="text-danger">
+                            Enter a valid End Date:
+                        </span>
+                    {% else %}
+                        End:
+                    {% endif %}
+                </b>
+                {{form.end}}
+
+                <button class="btn btn-primary" type="submit">Show</button>
+                |
+            </form>
+        </div>
+
+</div>
+
+<script>
+    $( "#{{form.start.id_for_label}}" ).datepicker({
+        onSelect: function(selected) {
+          $("#{{form.end.id_for_label}}").datepicker("option","minDate", selected)
+        },
+        dateFormat: "yy-mm-dd"
+    });
+    $( "#{{form.end.id_for_label}}" ).datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+</script>

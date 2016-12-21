@@ -1,0 +1,33 @@
+{% extends  'base.html' %}
+{% load staticfiles %}
+{% block title %}Log Statistics{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% include 'StatisticsDateRangeSelector.html' %}
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"><b>Hospital-Wide Appointment Averages</b></div>
+                     <div class="panel-body">
+                         <ul class="list-group">
+                            <li class="list-group-item"><b>Length Of Stay:</b> {{ length }}</li>
+                            <li class="list-group-item"><b>Appointments per patient:</b> {{ count }}</li>
+                         </ul>
+
+                         <form action="{% url 'statisticscategories' %}" >
+                            <button class="btn btn-primary" type="submit">Categories</button>
+                         </form>
+                     </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% block title %} {{patient.name}} - Patient Page{% endblock %} {% block content %}
+<style>
+.action {
+    outline: 1px solid #ddd;
+    padding: 15px;
+}
+.action:hover {
+    text-decoration: underline;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{patient.name}} - Actions</div>
+            <div class="panel-body" style="padding: 0px;">
+                <a  class="bottom" href="{% url 'listPrescriptions' patient.pk %}">
+                    <div  style="text-align: center" class="col-md-4 action">
+                        Prescriptions
+                    </div>
+                </a>
+                <a  class="bottom" href="{% url 'listTests' patient.pk %}">
+                    <div style="text-align: center" class="col-md-4 action">
+                            Medical Tests
+                    </div>
+                </a>
+                <a  class="bottom" href="{% url 'admit_patient' patient.pk %}">
+                    <div style="text-align: center" class="col-md-4 action">
+                         Admission Status : {{ patient.admitted_to }}
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">{{patient.name}} - Medical Information</div>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <p>{{patient.name}}'s Medical History:</p>
+                            {{ form.history }}
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{patient.name}} - Profile Information</div>
+            <div class="panel-body">
+                    <p>Date of Birth:
+                    <pre>{{patient.date_of_birth}}</pre></p>
+
+
+                    <p>Contact Information:
+                    <pre>{{patient.contact_information}}</pre></p>
+
+
+                    <p>Emergency Contact Information:
+                    <pre>{{e_contact}}</pre></p>
+
+                    <p>Preferred Hospital:
+                    <pre>{{patient.preferred_hospital}}</pre></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

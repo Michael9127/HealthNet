@@ -1,0 +1,46 @@
+{% extends "CreateAppointment.html" %}
+{% block title %} Update Appointment {% endblock %}
+
+{% block list_header %}
+    <li class="list-group-item"><label>Doctor</label>&nbsp;&nbsp;{{appointment.doctor.name}}</li>
+    <li class="list-group-item"><label>Patient</label>&nbsp;&nbsp;{{appointment.patient.name}}</li>
+{% endblock %}
+{% block submit_button %}Update{% endblock %}
+{% block extra_forms %}
+    {% load utils_extras %}
+    {% if not user|has_group:"Nurses" %}
+        <form class="navbar-form" action="{% url 'cancel_appointment' appointment.pk %}">
+            <button class="btn btn-danger" type="submit">Cancel Appointment</button>
+        </form>
+    {% endif %}
+    
+    {% if appointment.end|in_past %}
+        <style>
+        /* hide create and update buttons if the appointment is in the past.*/
+        button {display: none!important; visibility: hidden;}
+        </style>
+    {% endif %}
+    
+        <script>
+        // The end timepicker is usually set when the start timepicker is updated,
+        // due to it being based on durations from the start time.
+        // We need to trigger that manually the first time.
+
+        // Get the initial end time from the form; put into Date object `end`
+        end = new Date();
+        end_as_string = $('#{{ form.end_time.id_for_label }}').val();
+        end.setHours(parseInt(end_as_string.slice(0,2)));
+        end.setMinutes(parseInt(end_as_string.slice(3,5)));
+
+        // Initialize the start timepicker
+        $('#{{ form.start_time.id_for_label }}').timepicker({
+          'step': 15,
+          'forceRoundTime': true,
+          'timeFormat': 'H:i'
+        });
+        // Set up the end timepicker as offset from start timepicker
+        endFromStart();
+        // Restore the initial end time to the end timepicker
+        $('#{{ form.end_time.id_for_label }}').timepicker('setTime', end)
+    </script>
+{% endblock %}

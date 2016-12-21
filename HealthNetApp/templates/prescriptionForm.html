@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %} Add Prescription {% endblock %}
+{% block content %}
+    {% block above_form %}{% endblock %}
+    <div class="container">
+        <div class="row">
+            <!-- dummy div for centering -->
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Add Prescription for {{ patientName }}</div>
+                    <div class="panel-body">
+                        <form class="navbar-form" action="{% url 'acceptPrescriptionForm' patient_pk  %}" method="post">
+                            {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="control-group error">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+
+                            <ul class="list-group">
+                                {% include 'form_fields_loop.html' %}
+                            </ul>
+                            <button class="btn btn-default" type="submit">Submit</button> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'listPrescriptions' patient_pk %}">
+                                <button class="btn btn-default" type="button">Cancel</button></a>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">{% block extrapanel %}{% endblock %}</div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#{{form.end_Date.id_for_label}}").datepicker({
+                minDate : '{% now 'm/d/Y' %}'
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block title %}Patients Listing{% endblock %} {% block content %}
+{% include 'clickable_table.html' %}
+<script>
+    function filterPatients() {
+        searchText = document.getElementById('search').value.toLowerCase();
+        //console.log(searchText);
+        table = $('table')[0];
+        rows = table.rows
+
+        for (i = 0; i < rows.length; i++) { // ignore header row
+            row = rows[i];
+            name = row.cells[0].innerText || row.cells[0].textContent;
+            if (name.toLowerCase().indexOf(searchText) < 0) {
+                row.style.display = 'none';
+            } else {
+                row.style.display = '';
+            }
+        }
+    }
+</script>
+<div class="row ">
+    <div style="width:80%;"class="panel panel-default center-block ">
+        <div class="panel-heading">Patients</div>
+        <div class="panel-body">
+            Select a patient to view.
+            <div style="padding:10px;">
+                <input name="search" id="search" oninput="filterPatients();" class="form-control text-center" placeholder="Search">
+            </div>
+
+            <table class="table table-striped table-hover table-bordered">
+                {% for p in patients %}
+                <tr onclick="window.document.location='{% url 'updatepatientmedicalinformation' p.pk %}';">
+                    <td>{{ p.name }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+    {% endblock %}

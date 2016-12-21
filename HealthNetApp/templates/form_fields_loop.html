@@ -1,0 +1,11 @@
+{% for field in form %}
+    <li class="list-group-item">
+        {% if field.errors %}
+            <div class="error">{{ field.errors }}</div>
+        {% endif %}
+        <label for="{{field.id_for_label}}">
+            {{field.label}}
+        </label><br>
+        {{ field }}
+    </li>
+{% endfor %}

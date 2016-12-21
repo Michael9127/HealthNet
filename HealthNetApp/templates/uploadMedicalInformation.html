@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %} Upload Medical Test Results {% endblock %}
+{% block content %}
+    {% block above_form %}{% endblock %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Upload Test Results for {{ patientName }}</div>
+
+                    <div class="panel-body">
+                        {%if editing %}
+                            <form class="navbar-form" action="{% url 'editTest' test_pk %}" method="post" enctype="multipart/form-data">
+                        {% else %}
+                            <form class="navbar-form" action="{% url 'receiveMedicalTest' patient_pk %}" method="post" enctype="multipart/form-data">
+                        {% endif %}
+                            {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="control-group error">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                            <ul class="list-group">
+                                {% include 'form_fields_loop.html' %}
+                            </ul>
+                            <!--<p><input type="submit" value="Upload Test" class="form-control"/></p>-->
+                            <p><button class="btn btn-primary" type="submit">Upload Test</button>
+
+                            <a href="{% url 'listTests' patient_pk%}" class="btn btn-default">Cancel</a></p>
+                        </form>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">{% block extrapanel %}{% endblock %}</div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#{{form.testDate.id_for_label}}").datepicker();
+            $("#{{form.doctor.id_for_label}}").chosen();
+        });
+    </script>
+{% endblock %}

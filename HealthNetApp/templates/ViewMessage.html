@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %} Send Message {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="panel panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Message Details</b></div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Destination:</b> {{ Message.destination }}</li>
+                        <li class="list-group-item"><b>Source:</b> {{ Message.source }}</li>
+                        <li class="list-group-item"><b>Subject:</b> {{ Message.subject }}</li>
+                        <li class="list-group-item"><b>Body:</b> {{ Message.body }}</li>
+                        <li class="list-group-item"><b>Date:</b> {{ Message.date }}</li>
+                    </ul>
+
+                    <form action="{% url 'listmessages' %}">
+                        <button class="btn btn-primary" type="submit">List Messages</button>
+                    </form>
+                    <br>
+                    <form action="{% url 'reply' Message.pk %}">
+                        <button class="btn btn-primary" type="submit">Reply</button>
+                    </form>
+        </div>
+                </div>
+            </div>
+
+    </div>
+{% endblock %}

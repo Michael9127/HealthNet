@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load staticfiles %} {% block title %}Log Statistics{% endblock %} {% block content %}
+
+<div  class="row">
+	<div class="col-md-3 col-md-offset-2">
+		<div class="panel panel-default " style="height:200px">
+			<div class="panel-heading">Patient-Specific Statistics</div>
+			<div class="panel-body">
+				<ul  style="text-align: center" class="list-group">
+					<li class="list-group-item" ><a href="{% url 'viewstatistics' %}?metric=PatientAppointments&days=60">Amount of Appointments</a></li>
+					<li class="list-group-item" ><a href="{% url 'viewstatistics' %}?metric=staylength&days=60">Length of Appointment by Patient</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 col-md-offset-2">
+		<div class="panel panel-default" style="height:200px" >
+			<div class="panel-heading">Hospital-Wide Statistics</div>
+			<div class="panel-body">
+				<ul style="text-align: center" class="list-group">
+					<li class="list-group-item" ><a href="{% url 'viewstatistics' %}?metric=prescriptions&days=60">Prescriptions Issued</a></li>
+					<li class="list-group-item" ><a href="{% url 'viewstatistics' %}?metric=AdmissionReasons&days=60">Reasons For Admission</a></li>
+					<li class="list-group-item" ><a href="{% url 'viewstatistics' %}?metric=AppointmentAverages&days=60">Appointment Averages </a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

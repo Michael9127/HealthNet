@@ -1,0 +1,63 @@
+{% extends "register.html" %}
+{% block title %}Profile{% endblock %}
+{% block extrapanel %}
+<div class="panel panel-default">
+    <div class="panel-heading">Medical Information</div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <label>Medical History:</label>
+                {% if history %}
+                <p><pre>{{ history }}</pre></p>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <label>Prescriptions: </label>
+                {% for p in prescription %}
+                <p><pre> {{p}} </pre></p>
+                {% endfor %}
+            </li>
+            <li class="list-group-item">
+                <label>Tests: </label>
+                {% for test in tests %}
+                    <p>
+                    <td>
+                        <pre><a href="{% url 'viewTestForm' test.pk 0%}">{{test}}</a></pre>
+                    </td>
+                    </p>
+                {% endfor %}
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Export Information</div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <p>Warning: The following contains sensitive personally identifiable
+                    information, including everything visible on this page.</p>
+                <p><input type='checkbox' id='privacy-confirm' onclick='privacyCheck(this);'>I understand</input></p>
+                <script>
+                    function privacyCheck(checkbox){
+                        var exportLink = document.getElementById('export-link');
+                        var exportButton = document.getElementById('export-button');
+                        if (checkbox.checked){
+                            exportLink.href="{% url 'export' %}";
+                            exportButton.disabled = false;
+                        } else {
+                            exportLink.href="javascript:";
+                            exportButton.disabled = true;
+                        }
+                    }
+                </script>
+                <a href="javascript:" id="export-link">
+                    <button class="btn btn-warning" id="export-button"  disabled>
+                        Export as JSON</button>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

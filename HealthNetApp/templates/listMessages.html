@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block title %}Message Center{% endblock %} {% block content %}
+{% include 'clickable_table.html' %}
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Inbox</b></div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-hover" style="max-width: 90%; margin: auto;">
+                    <thead>
+                        <td><b>Source</b></td>
+                        <td><b>Subject</b></td>
+                        <td><b>Date</b></td>
+                    </thead>
+                    {% for m in Messages %}
+                    <tr onclick="window.document.location='{% url 'viewmessage' m.pk %}';">
+                        {% if m.read %}
+                        <td>{{m.source}}</td>
+                        <td>{{m.subject}}</td>
+                        <td>{{m.date}}</td>
+                        {% else %}
+                        <td><b>{{m.source}}</b></a></td>
+                        <td><b>{{m.subject}}</b></td>
+                        <td><b>{{m.date}}</b></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+
+                </table>
+                <!-- <form action="{% url 'sendmessage' %}">
+                    <button class="btn btn-primary" type="submit">Send Message</button>
+                </form> -->
+                <div style="padding:10px">
+                <a href="{% url 'sendmessage' %}" class="btn btn-primary">Compose</a>
+            </div>
+                <div style="text-align: center">
+                    <span class="step-links">
+                        {% if Messages.has_previous %}
+                            <a href="?page={{ Messages.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                    <span class="current">
+                        Page {{ Messages.number }} of {{ Messages.paginator.num_pages }}.
+                    </span>
+                    {% if Messages.has_next %}
+                        <a href="?page={{ Messages.next_page_number }}">next</a>
+                    {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

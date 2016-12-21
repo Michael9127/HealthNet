@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="" style="margin:  auto; max-width: 300px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">HealthNet Log-In</div>
+                    <div class="panel-body">
+                        <!-- removed class="navbar-form" to make input widths look nicer -->
+                        <form class="" action="/app/login/" method="post">
+                            {% csrf_token %}
+                            {% if invalid_login %}
+                                <div class="alert alert-danger">Invalid login</div>
+                            {% endif %}
+                            {% if auth_error %}
+                                <div class="alert alert-danger">{{ auth_error }}</div>
+                            {% endif %}
+                            <ul class="list-group">
+
+                                <li class="list-group-item">
+
+                                    <input accesskey="u" type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="form-control"
+                                           placeholder="Username">
+                                </li>
+                                <li class="list-group-item">
+                                    <input accesskey="p" type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}" class="form-control"
+                                           placeholder="Password">
+                                </li>
+                            </ul>
+                             <button accesskey="s" class="btn btn-default" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

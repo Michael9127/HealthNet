@@ -1,0 +1,87 @@
+{% load staticfiles %}
+{% load utils_extras %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'HealthNetApp/bootstrap-3.3.6-dist/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'HealthNetApp/bootstrap-3.3.6-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'HealthNetApp/jQuery/jquery-ui-1.11.4/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'HealthNetApp/Chosen/chosen.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'HealthNetApp/jQuery/jonthornton-jquery-timepicker-2496fe8/jquery.timepicker.css' %}">
+    <script src="{% static 'HealthNetApp/jQuery/jquery-1.12.1.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/bootstrap-3.3.6-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/jQuery/jquery-ui-1.11.4/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/jQuery/jonthornton-jquery-timepicker-2496fe8/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/Chosen/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/Chosen/chosen.proto.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/d3/d3.min.js' %}"></script>
+    <title>{% block title %}HealthNet{% endblock %} - HealthNet</title>
+    <style>
+    textarea {width:100%!important;}
+
+    pre {
+        white-space: pre-wrap;       /* CSS 3 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-break: keep-all; /*this stops the word breaking*/
+    }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- <div class="collapse navbar-collapse" id="navbar-collapse-1"> -->
+                    <ul class="nav navbar-nav">
+                        <li role="presentation"><img src="{% static 'favicon.ico' %}" width="46" height="46" ></li>
+                        {% if user.is_authenticated %}
+                            <li role="presentation"><p class="navbar-text">Welcome, {{ user.username }} </p></li>
+                            {% if user|has_group:"Patients" and not user.is_superuser%}
+                                <li role="presentation"><a href="{% url 'updatepatient' %}">Profile</a></li>
+                            {% endif %}
+                            {% if user.is_superuser %}
+                                <li role="presentation"><a href="{% url 'register_staff' %}">Register Staff</a></li>
+                                <li role="presentation"><a href="{% url 'view_logs' %}">View Logs</a></li>
+                                <li role="presentation"><a href="{% url 'Statistics' %}">View Log Statistics</a></li>
+                                <li role="presentation"><a href="{% url 'statisticscategories' %}">View General Statistics</a></li>
+                                <li role="presentation"><a href="{% url 'admin:index' %}">Database</a></li>
+                            {% endif %}
+                            {% if user|has_group:"Doctors" or user|has_group:"Nurses" %}
+                                <li role="presentation"><a href="{% url 'listpatients' %}">Patient List</a></li>
+                                <li role="presentation"><a href="{% url 'emergencyregistration' %}">Emergency Patient Registration</a></li>
+                            {% endif %}
+                            <li role="presentation"><a href="{% url 'Calendar' %}">Appointments</a></li>
+
+                            {% if user|new_message %}
+                                <li role="presentation"><a href="{% url 'listmessages' %}">Messages <span class="badge">{{user|new_message}}</span></a></li>
+                            {% else %}
+                                <li role="presentation"><a href="{% url 'listmessages' %}">Messages</a></li>
+                            {% endif %}
+
+                            <li role="presentation"><a href="{% url 'logout' %}">Logout</a></li>
+
+                        {% else %}
+                            <li role="presentation"><a href="{% url 'login' %}">Login</a></li>
+                            <li role="presentation"><a href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                <!-- </div> -->
+            </div>
+        </nav>
+    </div>
+
+        {% block content %}
+        {% endblock %}
+
+
+</div>
+</body>
+<footer class="container-fluid bg-2 text-center">
+    <p>HealthNet Designed by THE M.D. FIVE in Rochester </p>
+</footer>
+</html>

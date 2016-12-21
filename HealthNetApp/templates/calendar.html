@@ -1,0 +1,52 @@
+{% extends  'base.html' %}
+{% load staticfiles %}
+{% block title %}Appointments Calendar{% endblock %}
+{% block content %}
+{% load utils_extras %}
+
+
+    <link rel="stylesheet" href="{% static 'HealthNetApp/fullcalendar-2.6.1/fullcalendar.css' %}">
+
+    <script src="{% static 'HealthNetApp/fullcalendar-2.6.1/lib/jquery.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/fullcalendar-2.6.1/lib/moment.min.js' %}"></script>
+    <script src="{% static 'HealthNetApp/fullcalendar-2.6.1/fullcalendar.js' %}"></script>
+    <p>
+    {% if not user.is_superuser %} {# admins cannot create appointments #}
+        {% if can_create %}
+        <a href="{% url 'createappointment' %}">
+            <button type="button" class="btn btn-primary">New Appointment</button>
+        </a>
+        {% else %}
+        You cannot create any new appointments until the currently existing appointments occur or are canceled.
+        {% endif %}
+    {% endif %}
+    </p>
+    <div id='calendar'></div>
+
+    <script>
+    $(document).ready(function() {
+    // page is now ready, initialize the calendar...
+    $('#calendar').fullCalendar({
+		header: {
+				left: 'month '  {% if user|has_group:"Nurses" %} + 'basicDay' {% endif %},
+				center: 'title',
+				right: 'today prev,next'
+			},
+        timezone: 'local',
+        events :  {{ appointments |safe }},
+        ignoreTimezone: false
+    })
+	
+		var h = $("#calendar").height();
+		while($("#calendar").height() + $("#calendar").offset().top > $(window).height()){
+			h = h-15;
+			$('#calendar').fullCalendar('option', 'height', h);
+		}
+
+    });
+	
+	
+
+    </script>
+
+{% endblock %}

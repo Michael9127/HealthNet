@@ -1,0 +1,9 @@
+{% extends "register.html" %}
+{% block title %} Staff Registration {% endblock %}
+{% block above_form %}
+    {% if created %}
+    <div class="bg-success">
+        Successfully created user "{{ created }}".
+    </div>
+    {% endif %}
+{% endblock %}

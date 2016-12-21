@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Emergency Patient Registration{% endblock %}
+{% block content %}
+    <div class="container center-block" style="width:800px">
+        <div class="row ">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Emergency Registration - All Fields Non-Required</div>
+                    <div class="panel-body">
+                        <form class="navbar-form" action="" method="post">
+                            {% csrf_token %}
+
+                            <b>Username:</b> {{ username }}<br><br>
+                            <input type="hidden" name="username" value="{{ username }}">
+
+                            <b>Password:</b> {{ password }}<br><br>
+                            <input type="hidden" name="password" value="{{ password }}">
+
+                            <ul class="list-group">
+
+                            <li class="list-group-item">
+                            <label for="{{form.name.id_for_label}}">
+                                {{ form.name.label }}
+                            </label><br>
+                            {{ form.name }}
+                            </li>
+
+                            <li class="list-group-item">
+                            <label for="{{form.date_of_birth.id_for_label}}">
+                                {{ form.date_of_birth.label }}
+                            </label><br>
+                            {{ form.date_of_birth }}
+                            </li>
+
+                            <li class="list-group-item">
+                            <label for="{{form.contact_information.id_for_label}}">
+                                {{ form.contact_information.label }}
+                            </label><br>
+                            {{ form.contact_information }}
+                            </li>
+
+                            <li class="list-group-item">
+                            <label for="{{form.insurance_id.id_for_label}}">
+                                {{ form.insurance_id.label }}
+                            </label><br>
+                            {{ form.insurance_id }}
+                            </li>
+
+                            <li class="list-group-item">
+                            <label for="{{form.emergency_contact.id_for_label}}">
+                                {{ form.emergency_contact.label }}
+                            </label><br>
+                            {{ form.emergency_contact }}
+                            </li>
+
+
+                            </ul>
+
+                            <br>
+                        <button class="btn btn-default" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+        </div>
+
+<script>
+        $(function() {
+            $("#{{form.date_of_birth.id_for_label}}").datepicker();
+        });
+    </script>
+
+
+
+{% endblock %}

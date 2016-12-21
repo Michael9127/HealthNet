@@ -1,0 +1,37 @@
+<script>
+    // When the start timepicker changes, update the end timepicker with new durations.
+    var endFromStart = function() {
+          var start = $( "#{{ form.start_time.id_for_label }}").timepicker('getTime');
+          var endMin = new Date(start);
+          endMin.setTime(start.getTime() + (15 * 60 * 1000));
+          var endMax = new Date(start);
+          endMax.setTime(start.getTime() + (60 * 60 * 1000));
+          var endMax2 = new Date(endMax);
+          endMax2.setHours(18);
+          endMax2.setMinutes(0);
+          if (endMax2 < endMax) endMax = endMax2;
+          $('#{{ form.end_time.id_for_label }}').timepicker('remove');
+          $('#{{ form.end_time.id_for_label }}').val('');
+          $('#{{ form.end_time.id_for_label }}').timepicker({
+                'forceRoundTime': true,
+                'durationTime': start,
+                'minTime': endMin,
+                'maxTime': endMax,
+                'showDuration': true,
+                'step': 15,
+                'timeFormat': 'H:i'
+          });
+      };
+  $(function() {
+      $( "#{{ form.date.id_for_label }}" ).datepicker();
+      $('#{{ form.start_time.id_for_label }}').timepicker({
+          'step': 15,
+          'forceRoundTime': true,
+          'timeFormat': 'H:i',
+          'minTime': '8:00',
+          'maxTime': '17:45'
+      });
+      // When the start time changes, remake the endtime timepicker
+      $('#{{form.start_time.id_for_label }}').on('changeTime', endFromStart);
+  });
+</script>

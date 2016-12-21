@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} Create Appointment {% endblock %}
+{% block content %}
+{% include "timepicker_code.html" %}
+<div class="container">
+    <div class="panel panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Appointment</div>
+            <form class="navbar-form" method="post">
+            {% csrf_token %}
+                {% if errors %}
+                    <div class="alert alert-danger">{{errors}}</div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                    <div class="control-group error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                <ul class="list-group">
+                    {% block list_header %}{% endblock %}
+                    {% include 'form_fields_loop.html' %}
+                </ul>
+                <button class="btn btn-primary" type="submit">{% block submit_button %}Create{% endblock %}</button>
+            </form>
+            {% block extra_forms %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script>
+$("#{{ form.doctor.id_for_label }}").chosen();
+$("#{{ form.patient.id_for_label }}").chosen()
+</script>
+
+{% endblock %}

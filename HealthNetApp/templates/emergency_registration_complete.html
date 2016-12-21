@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Emergency Registration Complete{% endblock %}
+{% block content %}
+
+    <div class="alert alert-info">
+        <p>Emergency registration and admission was successfully completed for patient with:</p>
+        <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspusername:&nbsp <b>{{ username }}</b></p>
+        <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspand password:&nbsp <b>{{ password }}</b></p><br>
+        <p>Please record this information.</p>
+    </div>
+
+    <a href="{% url 'emergencyregistration' %}" class="btn btn-default">Register Another Patient</a>
+    <a href="{% url 'listpatients' %}" class="btn btn-default">View Patient List</a>
+
+{% endblock %}
